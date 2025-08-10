@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.Infrastructure.Me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.DigitalSigning.Ordering", "src\EvroTrust.DigitalSigning.Ordering\EvroTrust.DigitalSigning.Ordering.csproj", "{95997704-7CD4-4C06-B95F-47FB69132DC6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{25AFDA4D-BE7E-4EEF-8EDC-9B02BA7472BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.DigitalSigning.Tests", "test\EvroTrust.DigitalSigning.Tests\EvroTrust.DigitalSigning.Tests.csproj", "{32AD5904-24AE-484F-8D50-E4A0BAAAC69A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,10 @@ Global
 		{95997704-7CD4-4C06-B95F-47FB69132DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95997704-7CD4-4C06-B95F-47FB69132DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95997704-7CD4-4C06-B95F-47FB69132DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32AD5904-24AE-484F-8D50-E4A0BAAAC69A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32AD5904-24AE-484F-8D50-E4A0BAAAC69A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32AD5904-24AE-484F-8D50-E4A0BAAAC69A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32AD5904-24AE-484F-8D50-E4A0BAAAC69A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +75,7 @@ Global
 		{A6DCCE4F-8B2B-43F9-84CD-4A19928DECAC} = {6530A95E-1036-4DD8-B384-F65789A9F252}
 		{48DBA680-6936-4BA2-869B-46F109A2F664} = {6530A95E-1036-4DD8-B384-F65789A9F252}
 		{95997704-7CD4-4C06-B95F-47FB69132DC6} = {6530A95E-1036-4DD8-B384-F65789A9F252}
+		{32AD5904-24AE-484F-8D50-E4A0BAAAC69A} = {25AFDA4D-BE7E-4EEF-8EDC-9B02BA7472BE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AA89FBA7-D06D-438F-ACD8-8B7030B0700E}

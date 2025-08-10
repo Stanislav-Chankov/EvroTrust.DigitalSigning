@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EvroTrust.DigitalSigning.Persistence\EvroTrust.DigitalSigning.Persistence.csproj" />
     <ProjectReference Include="..\EvroTrust.Infrastructure.Messaging\EvroTrust.Infrastructure.Messaging.csproj" />
   </ItemGroup>
 </Project>

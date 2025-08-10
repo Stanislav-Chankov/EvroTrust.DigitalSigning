@@ -1,3 +1,6 @@
+using EvroTrust.DigitalSigning.Persistence;
+using EvroTrust.DigitalSigning.Persistence.Abstract;
+using EvroTrust.DigitalSigning.Persistence.Entities;
 using EvroTrust.Infrastructure.Messaging;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -12,18 +15,19 @@ namespace EvroTrust.DigitalSigning.Ordering
     public class RabbitMqBackgroundService : BackgroundService, IAsyncDisposable
     {
         private readonly ILogger<RabbitMqBackgroundService> _logger;
+        private readonly IServiceProvider _serviceProvider;
         private readonly RabbitMqOptions _options;
         private IConnection? _connection;
         private IChannel? _channel;
         private bool _disposed;
-        //private string _exchangeName = string.Empty;
-        //private string _queueName = string.Empty;
 
         public RabbitMqBackgroundService(
             ILogger<RabbitMqBackgroundService> logger,
-            IOptions<RabbitMqOptions> options)
+            IOptions<RabbitMqOptions> options,
+            IServiceProvider serviceProvider)
         {
             _logger = logger;
+            _serviceProvider = serviceProvider;
             _options = options.Value;
         }
 
@@ -64,41 +68,63 @@ namespace EvroTrust.DigitalSigning.Ordering
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await InitializeAsync();
-
-            //await _channel.QueueDeclareAsync(
-            //    queue: "orders_queue",
-            //    durable: true,
-            //    exclusive: false,
-            //    autoDelete: false,
-            //    arguments: null);
-
-            var consumer = new AsyncEventingBasicConsumer(_channel);
-            consumer.ReceivedAsync += async (model, ea) =>
+            while (!stoppingToken.IsCancellationRequested)
             {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<IDigitalSigningDbContext>();
 
-                _logger.LogInformation(
-                    "Received message: {Message}",
-                    message);
+                    _logger.LogInformation("Adding Product to the database.......");
 
-                await HandleMessageAsync(message, stoppingToken);
+                    await dbContext.Products.AddAsync(new Product
+                    {
+                        Name = "Test Product",
+                        Price = 100.00m,
+                        Quantity = 10,
+                    });
+                    await dbContext.SaveChangesAsync(stoppingToken);
 
-                await _channel.BasicAckAsync(ea.DeliveryTag, false);
-            };
+                    _logger.LogInformation("Added Product to the database!!!!!!!!!!!!!!!!!!");
+                }
 
-            _logger.LogInformation("Consume from queue", _options.QueueName);
+                _logger.LogInformation("Starting RabbitMQ background service...");
 
-            await _channel.BasicConsumeAsync(
-                queue: _options.QueueName,
-                autoAck: false,
-                consumer: consumer);
+                await InitializeAsync();
 
-            _logger.LogInformation("Ordering successfully running");
+                //await _channel.QueueDeclareAsync(
+                //    queue: "orders_queue",
+                //    durable: true,
+                //    exclusive: false,
+                //    autoDelete: false,
+                //    arguments: null);
 
-            // Keep the service running
-            await Task.Delay(Timeout.Infinite, stoppingToken);
+                var consumer = new AsyncEventingBasicConsumer(_channel);
+                consumer.ReceivedAsync += async (model, ea) =>
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+
+                    _logger.LogInformation(
+                        "Received message: {Message}",
+                        message);
+
+                    await HandleMessageAsync(message, stoppingToken);
+
+                    await _channel.BasicAckAsync(ea.DeliveryTag, false);
+                };
+
+                _logger.LogInformation("Consume from queue", _options.QueueName);
+
+                await _channel.BasicConsumeAsync(
+                    queue: _options.QueueName,
+                    autoAck: false,
+                    consumer: consumer);
+
+                _logger.LogInformation("Ordering successfully running");
+
+                // Keep the service running
+                await Task.Delay(Timeout.Infinite, stoppingToken);
+            }
         }
 
         private async Task HandleMessageAsync(string message, CancellationToken cancellationToken)

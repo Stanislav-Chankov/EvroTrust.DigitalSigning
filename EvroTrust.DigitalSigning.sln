@@ -1,0 +1,74 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36401.2
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "code-analysis", "code-analysis", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6530A95E-1036-4DD8-B384-F65789A9F252}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.DigitalSigning.WebApi", "src\EvroTrust.DigitalSigning.WebApi\EvroTrust.DigitalSigning.WebApi.csproj", "{637B9EEE-463D-3E1D-3980-CBD826C0B8E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.DigitalSigning.Persistence", "src\EvroTrust.DigitalSigning.Persistence\EvroTrust.DigitalSigning.Persistence.csproj", "{C94EB23D-203E-440F-A016-5C0D0E87B34E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.DigitalSigning.Inventory", "src\EvroTrust.DigitalSigning.Inventory\EvroTrust.DigitalSigning.Inventory.csproj", "{A6DCCE4F-8B2B-43F9-84CD-4A19928DECAC}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{5B233DE4-5407-4765-A2FA-C466ECD1565D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{6BAB1CE7-EF4A-4CE9-AA0C-62416549F3B8}"
+	ProjectSection(SolutionItems) = preProject
+		docs\patterns.md = docs\patterns.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.Infrastructure.Messaging", "src\EvroTrust.Infrastructure.Messaging\EvroTrust.Infrastructure.Messaging.csproj", "{48DBA680-6936-4BA2-869B-46F109A2F664}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.DigitalSigning.Ordering", "src\EvroTrust.DigitalSigning.Ordering\EvroTrust.DigitalSigning.Ordering.csproj", "{95997704-7CD4-4C06-B95F-47FB69132DC6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{637B9EEE-463D-3E1D-3980-CBD826C0B8E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{637B9EEE-463D-3E1D-3980-CBD826C0B8E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{637B9EEE-463D-3E1D-3980-CBD826C0B8E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{637B9EEE-463D-3E1D-3980-CBD826C0B8E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C94EB23D-203E-440F-A016-5C0D0E87B34E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C94EB23D-203E-440F-A016-5C0D0E87B34E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C94EB23D-203E-440F-A016-5C0D0E87B34E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C94EB23D-203E-440F-A016-5C0D0E87B34E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6DCCE4F-8B2B-43F9-84CD-4A19928DECAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6DCCE4F-8B2B-43F9-84CD-4A19928DECAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6DCCE4F-8B2B-43F9-84CD-4A19928DECAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6DCCE4F-8B2B-43F9-84CD-4A19928DECAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B233DE4-5407-4765-A2FA-C466ECD1565D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B233DE4-5407-4765-A2FA-C466ECD1565D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B233DE4-5407-4765-A2FA-C466ECD1565D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B233DE4-5407-4765-A2FA-C466ECD1565D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48DBA680-6936-4BA2-869B-46F109A2F664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48DBA680-6936-4BA2-869B-46F109A2F664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48DBA680-6936-4BA2-869B-46F109A2F664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48DBA680-6936-4BA2-869B-46F109A2F664}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95997704-7CD4-4C06-B95F-47FB69132DC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95997704-7CD4-4C06-B95F-47FB69132DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95997704-7CD4-4C06-B95F-47FB69132DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95997704-7CD4-4C06-B95F-47FB69132DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{637B9EEE-463D-3E1D-3980-CBD826C0B8E0} = {6530A95E-1036-4DD8-B384-F65789A9F252}
+		{C94EB23D-203E-440F-A016-5C0D0E87B34E} = {6530A95E-1036-4DD8-B384-F65789A9F252}
+		{A6DCCE4F-8B2B-43F9-84CD-4A19928DECAC} = {6530A95E-1036-4DD8-B384-F65789A9F252}
+		{48DBA680-6936-4BA2-869B-46F109A2F664} = {6530A95E-1036-4DD8-B384-F65789A9F252}
+		{95997704-7CD4-4C06-B95F-47FB69132DC6} = {6530A95E-1036-4DD8-B384-F65789A9F252}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA89FBA7-D06D-438F-ACD8-8B7030B0700E}
+	EndGlobalSection
+EndGlobal

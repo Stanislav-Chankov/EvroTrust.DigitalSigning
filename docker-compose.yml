@@ -1,0 +1,90 @@
+version: '3.9'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    ports:
+      - "5672:5672"   # AMQP port
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql_server
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"                     # Required to accept the license
+      MSSQL_SA_PASSWORD: "YourStrong!Passw0rd"  # Strong password required
+      MSSQL_PID: "Express"                # Optional: Express, Developer, etc.
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+  web-api:
+    container_name: web-api
+    image: web-api
+    build:
+        context: .
+        dockerfile: src/EvroTrust.DigitalSigning.WebApi/Dockerfile
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:443;http://+:80
+    ports:
+        - "5003:80"
+        - "5004:443"
+
+  inventory-service:
+    image: inventory-service
+    build:
+      context: .
+      dockerfile: DockerfileInventory
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+      replicas: 3
+    environment:
+      RABBITMQ_HOST: rabbitmq
+
+  # ordering-service:
+  #   image: ordering-service
+  #   build:
+  #       context: .
+  #       dockerfile: DockerfileOrdering
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #   deploy:
+  #       replicas: 3
+  #   environment:
+  #       RABBITMQ_HOST: rabbitmq
+
+  # payment-service:
+  #   build: ./PaymentService
+  #   container_name: payment-service
+  #   depends_on:
+  #     - rabbitmq
+  #   environment:
+  #     RABBITMQ_HOST: rabbitmq
+
+  # shipping-service:
+  #   build: ./ShippingService
+  #   container_name: shipping-service
+  #   depends_on:
+  #     - rabbitmq
+  #   environment:
+  #     RABBITMQ_HOST: rabbitmq
+volumes:
+  mssql_data:

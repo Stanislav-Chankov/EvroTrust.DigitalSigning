@@ -1,0 +1,46 @@
+## Use the official .NET 8 SDK image for building
+#FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+#
+#WORKDIR /app
+#
+## Copy project file and restore dependencies
+#COPY ../src/EvroTrust.DigitalSigning.Inventory/EvroTrust.DigitalSigning.Inventory.csproj ./
+#RUN dotnet restore
+#
+## Copy all source code and build the application
+#COPY ../src/EvroTrust.DigitalSigning.Inventory/. ./
+#RUN dotnet publish -c Release -o /out
+#
+## Use the .NET 8 runtime image for running the app
+#FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+#
+#WORKDIR /app
+#COPY --from=build /out ./
+#
+## Run the application
+#ENTRYPOINT ["dotnet", "../src/EvroTrust.DigitalSigning.Inventory.dll"]
+
+# Stage 1 - Build  the application
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /build
+
+## Copy all .csproj files
+#COPY ./code-analysis ./code-analysis
+#COPY ./nuget.config ./nuget.config
+#COPY ./libs ./libs
+COPY ./src ./src
+
+## Restore as distinct layers and build the application
+RUN dotnet restore "src/EvroTrust.DigitalSigning.Inventory/EvroTrust.DigitalSigning.Inventory.csproj"
+COPY . .
+WORKDIR "/build/src/EvroTrust.DigitalSigning.Inventory"
+RUN dotnet build "EvroTrust.DigitalSigning.Inventory.csproj" -c Release -o /app/build
+
+FROM build AS publish  
+RUN dotnet publish "EvroTrust.DigitalSigning.Inventory.csproj" -c Release -o /app/publish
+
+# Stage 2 - Run the application
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 as final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "EvroTrust.DigitalSigning.Inventory.dll"]

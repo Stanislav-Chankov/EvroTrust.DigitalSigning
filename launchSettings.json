@@ -5,12 +5,12 @@
       "commandVersion": "1.0",
       "composeLaunchAction": "LaunchBrowser",
       // "composeLaunchServiceName": "web-api",
-      "composeLaunchServiceName": "web-api inventory-service",
-      // "composeLaunchServiceName": "web-api inventory-service ordering-service",
+      // "composeLaunchServiceName": "web-api inventory-service",
+      "composeLaunchServiceName": "web-api inventory-service ordering-service",
       "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger",
       "serviceActions": {
         "inventory-service": "StartDebugging",
-        // "ordering-service": "StartDebugging",
+        "ordering-service": "StartDebugging",
         "web-api": "StartDebugging"
       }
     }

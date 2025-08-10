@@ -7,25 +7,25 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class OrderController : ControllerBase
+    public class InventoryController : ControllerBase
     {
         private readonly IRabbitMqPublisherService _publisher;
         private readonly IOptions<RabbitMqOptions> _rabbitMqOptions;
 
-        public OrderController(IRabbitMqPublisherService publisherService, IOptions<RabbitMqOptions> rabbitMqOptions)
+        public InventoryController(IRabbitMqPublisherService publisherService, IOptions<RabbitMqOptions> rabbitMqOptions)
         {
             _publisher = publisherService;
             _rabbitMqOptions = rabbitMqOptions;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrderAsync()
+        public async Task<IActionResult> RemoveProductFromInventoryAsync()
         {
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
-            await _publisher.PublishAsync("order", new CreateOrderCommand
+            await _publisher.PublishAsync("inventory", new CreateOrderCommand
             {
                 OrderId = Guid.NewGuid(),
-                CustomerName = "Orders Message",
+                CustomerName = "Inventory Message",
                 TotalAmount = 100.00m
             }.ToJsonString());
 

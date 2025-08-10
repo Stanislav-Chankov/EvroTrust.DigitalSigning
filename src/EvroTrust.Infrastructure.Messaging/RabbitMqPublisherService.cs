@@ -31,7 +31,7 @@ namespace EvroTrust.Infrastructure.Messaging
         public async Task InitializeAsync(RabbitMqOptions options)
         {
             _exchangeName = options.ExchangeName;
-            _queueName = options.QueueName;
+            _queueName = "inventory_queue"; //options.QueueName;
 
             var factory = new ConnectionFactory
             {
@@ -70,7 +70,14 @@ namespace EvroTrust.Infrastructure.Messaging
 
             // 3. Declare queue
             await _channel.QueueDeclareAsync(
-                queue: _queueName,
+                queue: "orders_queue",
+                durable: true,
+                exclusive: false,
+                autoDelete: false // optional - deletes when no consumers remain
+            );
+
+            await _channel.QueueDeclareAsync(
+                queue: "inventory_queue",
                 durable: true,
                 exclusive: false,
                 autoDelete: false // optional - deletes when no consumers remain
@@ -78,75 +85,17 @@ namespace EvroTrust.Infrastructure.Messaging
 
             // 4. Bind queue to exchange
             await _channel.QueueBindAsync(
-                queue: _queueName,
+                queue: "orders_queue",
                 exchange: _exchangeName,
-                routingKey: "tasks"
+                routingKey: "order"
+            );
+
+            await _channel.QueueBindAsync(
+                queue: "inventory_queue",
+                exchange: _exchangeName,
+                routingKey: "inventory"
             );
         }
-
-        //public async Task InitializeAsync(RabbitMqOptions options)
-        //{
-        //    if (isInitialized)
-        //    {
-        //        return;
-        //    }
-
-        //    var factory = new ConnectionFactory
-        //    {
-        //        HostName = options.HostName
-        //    };
-
-        //    SetRabbitMqOptions(options, factory);
-
-        //    _connection = await factory.CreateConnectionAsync();
-        //    _channel = await _connection.CreateChannelAsync();
-
-        //    if (options.Features != null)
-        //    {
-        //        foreach (var feature in options.Features)
-        //        {
-        //            // Register exchange
-        //            var ex = feature.Exchange;
-        //            await _channel.ExchangeDeclareAsync(
-        //                exchange: ex.Name,
-        //                type: ex.Type,
-        //                durable: ex.Durable,
-        //                autoDelete: ex.AutoDelete,
-        //                arguments: ex.Arguments
-        //            );
-
-        //            // Register queue
-        //            var q = feature.Queue;
-        //            await _channel.QueueDeclareAsync(
-        //                queue: q.Name,
-        //                durable: q.Durable,
-        //                exclusive: q.Exclusive,
-        //                autoDelete: q.AutoDelete,
-        //                arguments: q.Arguments
-        //            );
-
-        //            // Register bindings
-        //            if (feature.Bindings != null)
-        //            {
-        //                foreach (var binding in feature.Bindings)
-        //                {
-        //                    await _channel.QueueBindAsync(
-        //                        queue: binding.Queue,
-        //                        exchange: binding.Exchange,
-        //                        routingKey: binding.RoutingKey
-        //                    );
-        //                }
-        //            }
-
-        //            // Store for publishing
-        //            _featureExchangeMap[feature.Name] = ex.Name;
-        //            if (feature.Bindings != null && feature.Bindings.Count > 0)
-        //                _featureRoutingKeyMap[feature.Name] = feature.Bindings[0].RoutingKey;
-        //        }
-        //    }
-
-        //    isInitialized = true;
-        //}
 
         public async ValueTask PublishAsync(string routingKey, string message)
         {
@@ -177,8 +126,6 @@ namespace EvroTrust.Infrastructure.Messaging
                     message);
 
                 await _channel.BasicPublishAsync(
-                                  //exchange: _exchangeName,
-                                  //routingKey: "tasks",
                     exchange: _exchangeName,
                     routingKey: routingKey,
                     mandatory: false,
@@ -220,29 +167,6 @@ namespace EvroTrust.Infrastructure.Messaging
             _disposed = true;
             GC.SuppressFinalize(this);
         }
-
-        //private void SetRabbitMqOptions(RabbitMqOptions options, ConnectionFactory factory)
-        //{
-        //    if (!string.IsNullOrWhiteSpace(options.UserName))
-        //    {
-        //        factory.UserName = options.UserName;
-        //    }
-
-        //    if (!string.IsNullOrWhiteSpace(options.Password))
-        //    {
-        //        factory.Password = options.Password;
-        //    }
-
-        //    if (options.Port.HasValue)
-        //    {
-        //        factory.Port = options.Port.Value;
-        //    }
-
-        //    if (!string.IsNullOrWhiteSpace(options.VirtualHost))
-        //    {
-        //        factory.VirtualHost = options.VirtualHost;
-        //    }
-        //}
 
         private void SetRabbitMqOptions(RabbitMqOptions options, ConnectionFactory factory)
         {

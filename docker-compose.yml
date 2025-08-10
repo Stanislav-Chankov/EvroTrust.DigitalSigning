@@ -58,18 +58,18 @@ services:
     environment:
       RABBITMQ_HOST: rabbitmq
 
-  # ordering-service:
-  #   image: ordering-service
-  #   build:
-  #       context: .
-  #       dockerfile: DockerfileOrdering
-  #   depends_on:
-  #     rabbitmq:
-  #       condition: service_healthy
-  #   deploy:
-  #       replicas: 3
-  #   environment:
-  #       RABBITMQ_HOST: rabbitmq
+  ordering-service:
+    image: ordering-service
+    build:
+        context: .
+        dockerfile: DockerfileOrdering
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    deploy:
+        replicas: 3
+    environment:
+        RABBITMQ_HOST: rabbitmq
 
   # payment-service:
   #   build: ./PaymentService

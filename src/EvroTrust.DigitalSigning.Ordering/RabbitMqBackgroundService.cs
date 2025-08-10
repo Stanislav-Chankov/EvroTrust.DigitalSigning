@@ -39,39 +39,39 @@ namespace EvroTrust.DigitalSigning.Ordering
             _connection = await factory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
 
-            //// 2. Declare exchange (creates if not exists, does nothing if exists)
-            //await _channel.ExchangeDeclareAsync(
-            //    exchange: _exchangeName,
-            //    type: ExchangeType.Direct,
-            //    durable: true
-            //);
+            // 2. Declare exchange (creates if not exists, does nothing if exists)
+            await _channel.ExchangeDeclareAsync(
+                exchange: "my_topic_exchange",
+                type: ExchangeType.Direct,
+                durable: true
+            );
 
-            //// 3. Declare queue
-            //await _channel.QueueDeclareAsync(
-            //    queue: _queueName,
-            //    durable: true,
-            //    exclusive: false,
-            //    autoDelete: true // optional - deletes when no consumers remain
-            //);
+            // 3. Declare queue
+            await _channel.QueueDeclareAsync(
+                queue: "orders_queue",
+                durable: true,
+                exclusive: false,
+                autoDelete: false // optional - deletes when no consumers remain
+            );
 
-            //// 4. Bind queue to exchange
-            //await _channel.QueueBindAsync(
-            //    queue: _queueName,
-            //    exchange: _exchangeName,
-            //    routingKey: "tasks"
-            //);
+            // 4. Bind queue to exchange
+            await _channel.QueueBindAsync(
+                queue: "orders_queue",
+                exchange: "my_topic_exchange",
+                routingKey: "order"
+            );
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await InitializeAsync();
 
-            await _channel.QueueDeclareAsync(
-                queue: _options.QueueName,
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null);
+            //await _channel.QueueDeclareAsync(
+            //    queue: "orders_queue",
+            //    durable: true,
+            //    exclusive: false,
+            //    autoDelete: false,
+            //    arguments: null);
 
             var consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.ReceivedAsync += async (model, ea) =>
@@ -88,10 +88,14 @@ namespace EvroTrust.DigitalSigning.Ordering
                 await _channel.BasicAckAsync(ea.DeliveryTag, false);
             };
 
+            _logger.LogInformation("Consume from queue", _options.QueueName);
+
             await _channel.BasicConsumeAsync(
                 queue: _options.QueueName,
                 autoAck: false,
                 consumer: consumer);
+
+            _logger.LogInformation("Ordering successfully running");
 
             // Keep the service running
             await Task.Delay(Timeout.Infinite, stoppingToken);

@@ -12,10 +12,16 @@ namespace EvroTrust.DigitalSigning.Persistence.Configurations
             builder.Property(x => x.Title).IsRequired().HasMaxLength(128);
             builder.Property(x => x.Description).IsRequired().HasMaxLength(2048);
             builder.Property(x => x.AssignedAt).IsRequired();
+            builder.Property(x => x.AssignedBy).IsRequired().HasMaxLength(128);
 
             builder.HasMany(x => x.CodeSolutions)
                    .WithOne(x => x.CodingTask)
                    .HasForeignKey(x => x.CodingTaskId);
+
+            builder.HasOne(x => x.Candidate)
+                   .WithMany()
+                   .HasForeignKey(x => x.CandidateId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

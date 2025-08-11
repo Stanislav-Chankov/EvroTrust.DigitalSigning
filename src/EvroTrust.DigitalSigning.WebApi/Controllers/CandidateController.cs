@@ -1,10 +1,7 @@
 using EvroTrust.Infrastructure.Messaging;
 using EvroTrust.Infrastructure.Messaging.Commands;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System;
-using System.Threading.Tasks;
 
 namespace EvroTrust.DigitalSigning.WebApi.Controllers
 {
@@ -49,7 +46,7 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
         public async Task<IActionResult> AssignTask([FromBody] AssignTaskCommand command)
         {
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
-            await _publisher.PublishAsync("candidate.assignTask", new AssignTaskCommand
+            await _publisher.PublishAsync("task.assign", new AssignTaskCommand
             {
                 CandidateId = command.CandidateId,
                 CodingTaskId = command.CodingTaskId,
@@ -67,7 +64,7 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
         public async Task<IActionResult> UploadSolution([FromBody] UploadSolutionCommand command)
         {
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
-            await _publisher.PublishAsync("candidate.uploadSolution", new UploadSolutionCommand
+            await _publisher.PublishAsync("solution.upload", new UploadSolutionCommand
             {
                 CandidateId = command.CandidateId,
                 CodingTaskId = command.CodingTaskId,
@@ -101,7 +98,7 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
             };
 
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
-            await _publisher.PublishAsync("candidate.reviewSolution", reviewCommand);
+            await _publisher.PublishAsync("solution.review", reviewCommand);
 
             // Return dummy solution for demonstration
             return Ok(new { CandidateId = candidateId, SolutionCode = "// candidate's code here" });
@@ -111,7 +108,7 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
         public async Task<IActionResult> FinalDecision([FromBody] FinalDecisionCommand command)
         {
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
-            await _publisher.PublishAsync("candidate.finalDecision", new FinalDecisionCommand
+            await _publisher.PublishAsync("candidate.decision", new FinalDecisionCommand
             {
                 DecisionId = command.DecisionId,
                 CandidateId = command.CandidateId,

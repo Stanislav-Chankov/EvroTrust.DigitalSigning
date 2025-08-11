@@ -1,8 +1,6 @@
 using EvroTrust.DigitalSigning.BackgroundServices.Handlers;
 using EvroTrust.Infrastructure.Messaging;
 using EvroTrust.Infrastructure.Messaging.Commands;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -139,7 +137,8 @@ namespace EvroTrust.DigitalSigning.BackgroundServices
             var command = JsonSerializer.Deserialize<TCommand>(message, _jsonOptions);
             if (command != null)
             {
-                var handler = _serviceProvider.GetRequiredService<IMessageHandler<TCommand>>();
+                using var scope = _serviceProvider.CreateScope();
+                var handler = scope.ServiceProvider.GetRequiredService<IMessageHandler<TCommand>>();
                 await handler.HandleAsync(command, cancellationToken);
             }
             else

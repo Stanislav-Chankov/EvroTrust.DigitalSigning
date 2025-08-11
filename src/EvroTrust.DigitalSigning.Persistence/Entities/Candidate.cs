@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace EvroTrust.DigitalSigning.Persistence.Entities
 {
     public class Candidate

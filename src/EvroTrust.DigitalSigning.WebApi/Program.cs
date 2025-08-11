@@ -1,7 +1,6 @@
 using EvroTrust.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Text;
 

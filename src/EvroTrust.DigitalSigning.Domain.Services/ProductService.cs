@@ -1,8 +1,6 @@
 ﻿using EvroTrust.DigitalSigning.Domain.Services.Abstract;
 using EvroTrust.DigitalSigning.Persistence.Abstract;
 using EvroTrust.DigitalSigning.Persistence.Entities;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EvroTrust.DigitalSigning.Domain.Services
 {

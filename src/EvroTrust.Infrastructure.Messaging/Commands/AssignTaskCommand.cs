@@ -1,5 +1,3 @@
-using System;
-
 namespace EvroTrust.Infrastructure.Messaging.Commands
 {
     public class AssignTaskCommand

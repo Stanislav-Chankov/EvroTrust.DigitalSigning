@@ -1,7 +1,5 @@
 using EvroTrust.DigitalSigning.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EvroTrust.DigitalSigning.Persistence.Abstract
 {

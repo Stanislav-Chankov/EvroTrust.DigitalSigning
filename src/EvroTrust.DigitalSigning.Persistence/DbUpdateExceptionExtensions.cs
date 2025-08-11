@@ -1,7 +1,4 @@
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 using System.Text;
 
 namespace EvroTrust.DigitalSigning.Persistence

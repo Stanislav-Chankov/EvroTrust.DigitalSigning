@@ -1,5 +1,3 @@
-using System;
-
 namespace EvroTrust.DigitalSigning.Persistence.Entities
 {
     public class Decision

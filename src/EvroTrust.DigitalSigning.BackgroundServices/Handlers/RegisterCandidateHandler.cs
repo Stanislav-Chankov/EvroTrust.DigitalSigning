@@ -1,21 +1,21 @@
-using System.Threading;
-using System.Threading.Tasks;
 using EvroTrust.DigitalSigning.Domain.Services;
 using EvroTrust.DigitalSigning.Extensions;
+using EvroTrust.DigitalSigning.Persistence.Abstract;
 using EvroTrust.DigitalSigning.Persistence.Entities;
 using EvroTrust.Infrastructure.Messaging.Commands;
-using Microsoft.Extensions.Logging;
 
 namespace EvroTrust.DigitalSigning.BackgroundServices.Handlers
 {
     public class RegisterCandidateHandler : IMessageHandler<RegisterCandidateCommand>
     {
-        private readonly ICandidateService _candidateService;
+        private readonly IDigitalSigningDbContext _dbContext;
         private readonly ILogger<RegisterCandidateHandler> _logger;
 
-        public RegisterCandidateHandler(ICandidateService candidateService, ILogger<RegisterCandidateHandler> logger)
+        public RegisterCandidateHandler(
+            IDigitalSigningDbContext dbContext,
+            ILogger<RegisterCandidateHandler> logger)
         {
-            _candidateService = candidateService;
+            _dbContext = dbContext;
             _logger = logger;
         }
 
@@ -34,7 +34,9 @@ namespace EvroTrust.DigitalSigning.BackgroundServices.Handlers
                 ResumeUrl = command.ResumeUrl
             };
 
-            await _candidateService.RegisterCandidateAsync(candidate, cancellationToken);
+            await _dbContext.Candidates.AddAsync(candidate);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation("Handled RegisterCandidate: {Candidate}", candidate.ToJsonString());
         }

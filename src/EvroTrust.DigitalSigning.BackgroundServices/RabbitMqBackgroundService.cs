@@ -20,6 +20,11 @@ namespace EvroTrust.DigitalSigning.BackgroundServices
         private bool _disposed;
         private readonly IServiceProvider _serviceProvider;
 
+        private static readonly JsonSerializerOptions _jsonOptions = new()
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
         public RabbitMqBackgroundService(
             ILogger<RabbitMqBackgroundService> logger,
             IOptions<RabbitMqOptions> options,
@@ -103,55 +108,20 @@ namespace EvroTrust.DigitalSigning.BackgroundServices
                 switch (queue)
                 {
                     case "candidate_register_queue":
-                    {
-                        var command = JsonSerializer.Deserialize<RegisterCandidateCommand>(message);
-                        if (command != null)
-                        {
-                            var handler = _serviceProvider.GetRequiredService<IMessageHandler<RegisterCandidateCommand>>();
-                            await handler.HandleAsync(command, cancellationToken);
-                        }
+                        await HandleCommandAsync<RegisterCandidateCommand>(message, cancellationToken);
                         break;
-                    }
                     case "task_assign_queue":
-                    {
-                        var command = JsonSerializer.Deserialize<AssignTaskCommand>(message);
-                        if (command != null)
-                        {
-                            var handler = _serviceProvider.GetRequiredService<IMessageHandler<AssignTaskCommand>>();
-                            await handler.HandleAsync(command, cancellationToken);
-                        }
+                        await HandleCommandAsync<AssignTaskCommand>(message, cancellationToken);
                         break;
-                    }
                     case "solution_upload_queue":
-                    {
-                        var command = JsonSerializer.Deserialize<UploadSolutionCommand>(message);
-                        if (command != null)
-                        {
-                            var handler = _serviceProvider.GetRequiredService<IMessageHandler<UploadSolutionCommand>>();
-                            await handler.HandleAsync(command, cancellationToken);
-                        }
+                        await HandleCommandAsync<UploadSolutionCommand>(message, cancellationToken);
                         break;
-                    }
                     case "solution_review_queue":
-                    {
-                        var command = JsonSerializer.Deserialize<ReviewSolutionCommand>(message);
-                        if (command != null)
-                        {
-                            var handler = _serviceProvider.GetRequiredService<IMessageHandler<ReviewSolutionCommand>>();
-                            await handler.HandleAsync(command, cancellationToken);
-                        }
+                        await HandleCommandAsync<ReviewSolutionCommand>(message, cancellationToken);
                         break;
-                    }
                     case "candidate_decision_queue":
-                    {
-                        var command = JsonSerializer.Deserialize<FinalDecisionCommand>(message);
-                        if (command != null)
-                        {
-                            var handler = _serviceProvider.GetRequiredService<IMessageHandler<FinalDecisionCommand>>();
-                            await handler.HandleAsync(command, cancellationToken);
-                        }
+                        await HandleCommandAsync<FinalDecisionCommand>(message, cancellationToken);
                         break;
-                    }
                     default:
                         _logger.LogWarning("Unknown queue: {Queue}", queue);
                         break;
@@ -160,6 +130,21 @@ namespace EvroTrust.DigitalSigning.BackgroundServices
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error handling message from queue {Queue}: {Message}", queue, message);
+            }
+        }
+
+        private async Task HandleCommandAsync<TCommand>(string message, CancellationToken cancellationToken)
+            where TCommand : class
+        {
+            var command = JsonSerializer.Deserialize<TCommand>(message, _jsonOptions);
+            if (command != null)
+            {
+                var handler = _serviceProvider.GetRequiredService<IMessageHandler<TCommand>>();
+                await handler.HandleAsync(command, cancellationToken);
+            }
+            else
+            {
+                _logger.LogWarning("Failed to deserialize message to {CommandType}: {Message}", typeof(TCommand).Name, message);
             }
         }
 

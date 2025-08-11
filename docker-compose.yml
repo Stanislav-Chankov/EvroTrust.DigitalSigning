@@ -15,21 +15,38 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
     - evrotrust-net
 
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: mssql_server
+  # mssql:
+  #   image: mcr.microsoft.com/mssql/server:2022-latest
+  #   container_name: mssql_server
+  #   restart: always
+  #   environment:
+  #     ACCEPT_EULA: "Y"                     # Required to accept the license
+  #     MSSQL_SA_PASSWORD: "YourStrong!Passw0rd"  # Strong password required
+  #     MSSQL_PID: "Express"                # Optional: Express, Developer, etc.
+  #   ports:
+  #     - "1433:1433"
+  #   volumes:
+  #     - mssql_data:/var/opt/mssql
+  #   networks:
+  #     - evrotrust-net
+
+  postgres:
+    image: postgres:16
+    container_name: postgres_server
     restart: always
     environment:
-      ACCEPT_EULA: "Y"                     # Required to accept the license
-      MSSQL_SA_PASSWORD: "YourStrong!Passw0rd"  # Strong password required
-      MSSQL_PID: "Express"                # Optional: Express, Developer, etc.
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: YourStrong!Passw0rd
+      POSTGRES_DB: evrotrustdb
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - mssql_data:/var/opt/mssql
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - evrotrust-net
 
@@ -51,11 +68,11 @@ services:
     networks:
     - evrotrust-net
 
-  inventory-service:
-    image: inventory-service
+  background-services:
+    image: background-services
     build:
       context: .
-      dockerfile: DockerfileInventory
+      dockerfile: DockerfileBackgroundServices
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -66,24 +83,41 @@ services:
     environment:
       RABBITMQ_HOST: rabbitmq
 
-  ordering-service:
-    image: ordering-service
-    build:
-        context: .
-        dockerfile: DockerfileOrdering
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-    deploy:
-        replicas: 3
-    networks:
-      - evrotrust-net
-    environment:
-        RABBITMQ_HOST: rabbitmq
+  # inventory-service:
+  #   image: inventory-service
+  #   build:
+  #     context: .
+  #     dockerfile: DockerfileInventory
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #   deploy:
+  #     replicas: 3
+  #   networks:
+  #     - evrotrust-net
+  #   environment:
+  #     RABBITMQ_HOST: rabbitmq
+
+  # ordering-service:
+  #   image: ordering-service
+  #   build:
+  #       context: .
+  #       dockerfile: DockerfileOrdering
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #   deploy:
+  #       replicas: 3
+  #   networks:
+  #     - evrotrust-net
+  #   environment:
+  #       RABBITMQ_HOST: rabbitmq
 
 volumes:
-  mssql_data:
- 
+  rabbitmq_data:
+  # mssql_data:
+  postgres_data:
+
 networks:
   evrotrust-net:
     driver: bridge

@@ -14,4 +14,7 @@
     <None Include="DockerfileInventory" />
     <None Include="DockerfileOrdering" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\EvroTrust.Infrastructure.Messaging.Commands\" />
+  </ItemGroup>
 </Project>

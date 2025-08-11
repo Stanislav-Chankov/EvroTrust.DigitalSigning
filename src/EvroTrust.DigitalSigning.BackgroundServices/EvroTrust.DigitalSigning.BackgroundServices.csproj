@@ -4,9 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-EvroTrust.DigitalSigning.Ordering-416d7e9f-2450-4e14-b2d7-4c24b1b3d29f</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..</DockerfileContext>
+    <UserSecretsId>dotnet-EvroTrust.DigitalSigning.BackgroundService-e89ee8e4-e5b0-4925-b167-6491297204ed</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +14,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,11 +11,10 @@ namespace EvroTrust.DigitalSigning.Persistence
         {
         }
 
-        public DbSet<Order> Orders { get; set; } = default!;
-        public DbSet<Payment> Payments { get; set; } = default!;
-        public DbSet<Shipment> Shipments { get; set; } = default!;
-        public DbSet<Product> Products { get; set; } = default!;
-
+        public DbSet<Candidate> Candidates { get; set; } = default!;
+        public DbSet<CodeSolution> CodeSolutions { get; set; } = default!;
+        public DbSet<CodingTask> CodingTasks { get; set; } = default!;
+        public DbSet<Decision> Decisions { get; set; } = default!;
 
         public override int SaveChanges()
         {

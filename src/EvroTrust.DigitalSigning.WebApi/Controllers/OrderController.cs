@@ -1,4 +1,4 @@
-using EvroTrust.DigitalSigning.WebApi.Extensions;
+using EvroTrust.DigitalSigning.Extensions;
 using EvroTrust.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace EvroTrust.DigitalSigning.WebApi.Extensions
+namespace EvroTrust.DigitalSigning.Extensions
 {
     public static class JsonExtensions
     {

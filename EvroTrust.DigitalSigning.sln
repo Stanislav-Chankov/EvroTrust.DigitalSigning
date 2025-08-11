@@ -31,6 +31,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{25AFDA4D-B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.DigitalSigning.Tests", "test\EvroTrust.DigitalSigning.Tests\EvroTrust.DigitalSigning.Tests.csproj", "{32AD5904-24AE-484F-8D50-E4A0BAAAC69A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.DigitalSigning.Domain.Services", "src\EvroTrust.DigitalSigning.Domain.Services\EvroTrust.DigitalSigning.Domain.Services.csproj", "{EC3446BF-98E1-4080-BBE7-3D0CD3267158}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.DigitalSigning.Extensions", "src\EvroTrust.DigitalSigning.Extensions\EvroTrust.DigitalSigning.Extensions.csproj", "{D6D80475-C0B5-49B8-8C33-92C131551E89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.DigitalSigning.BackgroundServices", "src\EvroTrust.DigitalSigning.BackgroundServices\EvroTrust.DigitalSigning.BackgroundServices.csproj", "{ABB594AC-5BDA-ED7C-C900-D207DCE9331A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +71,18 @@ Global
 		{32AD5904-24AE-484F-8D50-E4A0BAAAC69A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32AD5904-24AE-484F-8D50-E4A0BAAAC69A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32AD5904-24AE-484F-8D50-E4A0BAAAC69A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC3446BF-98E1-4080-BBE7-3D0CD3267158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC3446BF-98E1-4080-BBE7-3D0CD3267158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC3446BF-98E1-4080-BBE7-3D0CD3267158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC3446BF-98E1-4080-BBE7-3D0CD3267158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6D80475-C0B5-49B8-8C33-92C131551E89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6D80475-C0B5-49B8-8C33-92C131551E89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6D80475-C0B5-49B8-8C33-92C131551E89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6D80475-C0B5-49B8-8C33-92C131551E89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABB594AC-5BDA-ED7C-C900-D207DCE9331A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABB594AC-5BDA-ED7C-C900-D207DCE9331A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABB594AC-5BDA-ED7C-C900-D207DCE9331A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABB594AC-5BDA-ED7C-C900-D207DCE9331A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +94,9 @@ Global
 		{48DBA680-6936-4BA2-869B-46F109A2F664} = {6530A95E-1036-4DD8-B384-F65789A9F252}
 		{95997704-7CD4-4C06-B95F-47FB69132DC6} = {6530A95E-1036-4DD8-B384-F65789A9F252}
 		{32AD5904-24AE-484F-8D50-E4A0BAAAC69A} = {25AFDA4D-BE7E-4EEF-8EDC-9B02BA7472BE}
+		{EC3446BF-98E1-4080-BBE7-3D0CD3267158} = {6530A95E-1036-4DD8-B384-F65789A9F252}
+		{D6D80475-C0B5-49B8-8C33-92C131551E89} = {6530A95E-1036-4DD8-B384-F65789A9F252}
+		{ABB594AC-5BDA-ED7C-C900-D207DCE9331A} = {6530A95E-1036-4DD8-B384-F65789A9F252}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AA89FBA7-D06D-438F-ACD8-8B7030B0700E}

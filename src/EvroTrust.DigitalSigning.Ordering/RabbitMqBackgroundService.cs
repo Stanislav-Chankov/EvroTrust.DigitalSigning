@@ -76,13 +76,13 @@ namespace EvroTrust.DigitalSigning.Ordering
 
                     _logger.LogInformation("Adding Product to the database.......");
 
-                    await dbContext.Products.AddAsync(new Product
-                    {
-                        Name = "Test Product",
-                        Price = 100.00m,
-                        Quantity = 10,
-                    });
-                    await dbContext.SaveChangesAsync(stoppingToken);
+                    //await dbContext.Products.AddAsync(new Product
+                    //{
+                    //    Name = "Test Product",
+                    //    Price = 100.00m,
+                    //    Quantity = 10,
+                    //});
+                    //await dbContext.SaveChangesAsync(stoppingToken);
 
                     _logger.LogInformation("Added Product to the database!!!!!!!!!!!!!!!!!!");
                 }

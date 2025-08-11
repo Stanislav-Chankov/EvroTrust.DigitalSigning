@@ -9,16 +9,16 @@ WORKDIR /build
 COPY ./src ./src
 
 ## Restore as distinct layers and build the application
-RUN dotnet restore "src/EvroTrust.DigitalSigning.Inventory/EvroTrust.DigitalSigning.Inventory.csproj"
+RUN dotnet restore "src/EvroTrust.DigitalSigning.BackgroundServices/EvroTrust.DigitalSigning.BackgroundServices.csproj"
 COPY . .
-WORKDIR "/build/src/EvroTrust.DigitalSigning.Inventory"
-RUN dotnet build "EvroTrust.DigitalSigning.Inventory.csproj" -c Release -o /app/build
+WORKDIR "/build/src/EvroTrust.DigitalSigning.BackgroundServices"
+RUN dotnet build "EvroTrust.DigitalSigning.BackgroundServices.csproj" -c Release -o /app/build
 
 FROM build AS publish  
-RUN dotnet publish "EvroTrust.DigitalSigning.Inventory.csproj" -c Release -o /app/publish
+RUN dotnet publish "EvroTrust.DigitalSigning.BackgroundServices.csproj" -c Release -o /app/publish
 
 # Stage 2 - Run the application
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 as final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "EvroTrust.DigitalSigning.Inventory.dll"]
+ENTRYPOINT ["dotnet", "EvroTrust.DigitalSigning.BackgroundServices.dll"]

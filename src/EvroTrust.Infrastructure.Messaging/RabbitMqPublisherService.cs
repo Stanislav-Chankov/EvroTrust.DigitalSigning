@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using EvroTrust.DigitalSigning.Extensions;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
@@ -43,24 +44,28 @@ namespace EvroTrust.Infrastructure.Messaging
             _connection = await factory.CreateConnectionAsync();
             _channel = await _connection.CreateChannelAsync();
 
-            //await _channel.ExchangeDeclareAsync(
-            //    exchange: _exchangeName,
-            //    type: ExchangeType.Topic,
-            //    durable: true
-            //);
+            // Exchange
+            await _channel.ExchangeDeclareAsync(
+                exchange: "candidate_exchange",
+                type: ExchangeType.Direct,
+                durable: true
+            );
 
-            //await _channel.QueueDeclareAsync(
-            //    queue: _queueName,
-            //    durable: true,    // persists messages if broker restarts
-            //    exclusive: false, // multiple connections allowed
-            //    autoDelete: false // keep queue alive even if no consumers
-            //);
+            // Queues
+            await _channel.QueueDeclareAsync("candidate_register_queue", durable: true, exclusive: false, autoDelete: false);
+            await _channel.QueueDeclareAsync("task_assign_queue", durable: true, exclusive: false, autoDelete: false);
+            await _channel.QueueDeclareAsync("solution_upload_queue", durable: true, exclusive: false, autoDelete: false);
+            await _channel.QueueDeclareAsync("solution_review_queue", durable: true, exclusive: false, autoDelete: false);
+            await _channel.QueueDeclareAsync("candidate_decision_queue", durable: true, exclusive: false, autoDelete: false);
 
-            //await _channel.QueueBindAsync(
-            //    queue: _queueName,
-            //    exchange: "app.direct",
-            //    routingKey: "tasks"
-            //);
+            // Bindings
+            await _channel.QueueBindAsync("candidate_register_queue", "candidate_exchange", "candidate.register");
+            await _channel.QueueBindAsync("task_assign_queue", "candidate_exchange", "task.assign");
+            await _channel.QueueBindAsync("solution_upload_queue", "candidate_exchange", "solution.upload");
+            await _channel.QueueBindAsync("solution_review_queue", "candidate_exchange", "solution.review");
+            await _channel.QueueBindAsync("candidate_decision_queue", "candidate_exchange", "candidate.decision");
+
+            // WORKING EXAMPLE
             // 2. Declare exchange (creates if not exists, does nothing if exists)
             await _channel.ExchangeDeclareAsync(
                 exchange: _exchangeName,
@@ -97,7 +102,12 @@ namespace EvroTrust.Infrastructure.Messaging
             );
         }
 
-        public async ValueTask PublishAsync(string routingKey, string message)
+        public ValueTask PublishAsync<TMessage>(string routingKey, TMessage message)
+        {
+            return PublishAsync(routingKey, message.ToJsonString());
+        }
+
+        private async ValueTask PublishAsync(string routingKey, string message)
         {
             if (!_disposed)
             {

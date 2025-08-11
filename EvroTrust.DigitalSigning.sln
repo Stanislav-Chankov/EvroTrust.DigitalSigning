@@ -18,7 +18,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{6BAB1CE7-EF4A-4CE9-AA0C-62416549F3B8}"
 	ProjectSection(SolutionItems) = preProject
-		docs\patterns.md = docs\patterns.md
+		docs\flow.md = docs\flow.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvroTrust.Infrastructure.Messaging", "src\EvroTrust.Infrastructure.Messaging\EvroTrust.Infrastructure.Messaging.csproj", "{48DBA680-6936-4BA2-869B-46F109A2F664}"

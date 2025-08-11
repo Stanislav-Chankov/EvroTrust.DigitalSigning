@@ -5,7 +5,7 @@ namespace EvroTrust.DigitalSigning.Persistence.Entities
         public Guid CodeSolutionId { get; set; }
         public Guid CandidateId { get; set; }
         public Guid CodingTaskId { get; set; }
-        public byte[] EncryptedSolution { get; set; } = Array.Empty<byte>();
+        public string EncryptedSolution { get; set; }
         public DateTime UploadedAt { get; set; }
         public bool IsReviewed { get; set; }
 

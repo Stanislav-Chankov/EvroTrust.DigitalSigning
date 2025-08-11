@@ -13,7 +13,8 @@
     <None Include=".dockerignore" />
     <None Include="DockerfileInventory" />
     <None Include="DockerfileOrdering" />
-    <None Include="src\EvroTrust.DigitalSigning.Persistence.Entities\CodeSolution.cs" />
-    <None Include="src\EvroTrust.Infrastructure.Messaging.Commands\UploadSolutionCommand.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
   </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@ namespace EvroTrust.DigitalSigning.Tests
         [Fact]
         public void Test1()
         {
-
+            Assert.True(true, "This is a placeholder test that always passes.");
         }
     }
 }

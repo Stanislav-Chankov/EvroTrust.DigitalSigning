@@ -6,13 +6,16 @@ namespace EvroTrust.DigitalSigning.BackgroundServices.Handlers
 {
     public class UploadSolutionHandler : IMessageHandler<UploadSolutionCommand>
     {
+        private readonly IEncryptionService _encryptionService;
         private readonly ILogger<UploadSolutionHandler> _logger;
         private readonly IDigitalSigningDbContext _dbContext;
 
         public UploadSolutionHandler(
+            IEncryptionService encryptionService,
             ILogger<UploadSolutionHandler> logger,
             IDigitalSigningDbContext dbContext)
         {
+            _encryptionService = encryptionService;
             _logger = logger;
             _dbContext = dbContext;
         }
@@ -21,12 +24,16 @@ namespace EvroTrust.DigitalSigning.BackgroundServices.Handlers
         {
             _logger.LogInformation("Handled UploadSolution for CandidateId: {CandidateId}, FileName: {FileName}", command.CandidateId, command.FileName);
 
+            // Encrypt and then base64 encode
+            var encryptedBytes = _encryptionService.Encrypt(command.EncryptedSolution);
+            var base64EncryptedSolution = Convert.ToBase64String(encryptedBytes);
+
             var codeSolution = new CodeSolution
             {
                 CodeSolutionId = command.CodeSolutionId,
                 CandidateId = command.CandidateId,
                 CodingTaskId = command.CodingTaskId,
-                EncryptedSolution = command.EncryptedSolution,
+                EncryptedSolution = base64EncryptedSolution,
                 UploadedAt = command.UploadedAt,
                 FileName = command.FileName,
                 FileType = command.FileType

@@ -1,6 +1,5 @@
 using EvroTrust.DigitalSigning.BackgroundServices;
 using EvroTrust.DigitalSigning.BackgroundServices.Handlers;
-using EvroTrust.DigitalSigning.Domain.Services;
 using EvroTrust.DigitalSigning.Persistence;
 using EvroTrust.DigitalSigning.Persistence.Abstract;
 using EvroTrust.Infrastructure.Messaging;
@@ -10,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
 builder.Services.AddHostedService<RabbitMqBackgroundService>();
-builder.Services.AddHostedService<DatabaseInitializerService>();
 
 
 // Register dbContext, repositories, services, etc.
@@ -22,6 +20,8 @@ builder.Services.AddScoped<IMessageHandler<RegisterCandidateCommand>, RegisterCa
 builder.Services.AddScoped<IMessageHandler<UploadSolutionCommand>, UploadSolutionHandler>();
 builder.Services.AddScoped<IMessageHandler<ReviewSolutionCommand>, ReviewSolutionHandler>();
 builder.Services.AddScoped<IMessageHandler<FinalDecisionCommand>, FinalDecisionHandler>();
+
+builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 
 var app = builder.Build();
 app.Run();

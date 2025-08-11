@@ -1,4 +1,4 @@
-namespace EvroTrust.DigitalSigning.WebApi.Controllers
+namespace EvroTrust.DigitalSigning.WebApi.Models
 {
     public class LoginModel
     {

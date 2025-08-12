@@ -1,8 +1,9 @@
+using EvroTrust.DigitalSigning.WebApi.Authz;
+
 namespace EvroTrust.DigitalSigning.WebApi.Models
 {
     public class LoginModel
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public RoleType Role { get; set; }
     }
 }

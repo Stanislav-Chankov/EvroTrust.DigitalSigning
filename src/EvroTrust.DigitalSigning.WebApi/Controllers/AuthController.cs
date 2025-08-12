@@ -1,5 +1,5 @@
+using EvroTrust.DigitalSigning.WebApi.Authz;
 using EvroTrust.DigitalSigning.WebApi.Models;
-using Homeport.Domain.Services.Providers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +20,7 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
         [AllowAnonymous]
         public IActionResult GetToken([FromBody] LoginModel login)
         {
-            return Ok(new { token = _tokenProvider.GenerateAccessToken() });
+            return Ok(new { token = _tokenProvider.GenerateAccessToken(login.Role) });
         }
     }
 }

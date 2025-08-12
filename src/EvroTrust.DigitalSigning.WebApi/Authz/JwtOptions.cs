@@ -1,4 +1,4 @@
-﻿namespace EvroTrust.DigitalSigning.WebApi.Extensions
+﻿namespace EvroTrust.DigitalSigning.WebApi.Authz
 {
     public class JwtOptions
     {

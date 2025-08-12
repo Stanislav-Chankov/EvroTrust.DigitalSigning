@@ -1,11 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using EvroTrust.DigitalSigning.WebApi.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Homeport.Domain.Services.Providers
+namespace EvroTrust.DigitalSigning.WebApi.Authz
 {
     public class TokenProvider : ITokenProvider
     {
@@ -16,7 +15,7 @@ namespace Homeport.Domain.Services.Providers
             _jwtOptions = jwtOptions.Value;
         }
 
-        public string GenerateAccessToken()
+        public string GenerateAccessToken(RoleType role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_jwtOptions.Key);
@@ -27,8 +26,8 @@ namespace Homeport.Domain.Services.Providers
                 {
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(ClaimTypes.Expiration, DateTime.UtcNow.AddDays(1).ToShortDateString()),
+                    new Claim(ClaimTypes.Role, role.ToString()),
                     //new Claim(ClaimTypes.Email, domain.Email),
-                    //new Claim(ClaimTypes.Role, domain.Role.ToString()),
                 }),
                 Audience = _jwtOptions.Audience,
                 Issuer = _jwtOptions.Issuer,

@@ -1,4 +1,3 @@
-using EvroTrust.DigitalSigning.Domain.Services;
 using EvroTrust.DigitalSigning.Persistence.Abstract;
 using EvroTrust.Infrastructure.Messaging.Commands;
 using Microsoft.EntityFrameworkCore;

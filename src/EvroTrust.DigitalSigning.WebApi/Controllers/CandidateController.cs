@@ -1,12 +1,13 @@
 using EvroTrust.Infrastructure.Messaging;
 using EvroTrust.Infrastructure.Messaging.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace EvroTrust.DigitalSigning.WebApi.Controllers
 {
     [ApiController]
-    // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class CandidateController : ControllerBase
     {
@@ -82,6 +83,13 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
         [HttpGet("review-solution/{candidateId}")]
         public async Task<IActionResult> ReviewSolution(Guid candidateId)
         {
+            // TODO: Refactor with Callback/Webhook (Push) Pattern
+            // 1.User submits a review request via your API.
+            // 2.API publishes a message(e.g., ReviewSolutionCommand) to RabbitMQ.
+            // 3.Background service(worker) processes the review in the background.
+            // 4.When processing is complete, the background service sends and email with the review results.
+
+
             // For demonstration, create a ReviewSolutionCommand with all fields mapped
             var reviewCommand = new ReviewSolutionCommand
             {

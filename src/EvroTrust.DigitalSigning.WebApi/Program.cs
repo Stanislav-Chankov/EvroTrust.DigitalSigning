@@ -1,4 +1,6 @@
+using EvroTrust.DigitalSigning.WebApi.Extensions;
 using EvroTrust.Infrastructure.Messaging;
+using Homeport.Domain.Services.Providers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -11,24 +13,29 @@ var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 var jwtAudience = builder.Configuration["Jwt:Audience"];
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
     .AddJwtBearer(options =>
     {
+        options.SaveToken = true;
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = false,
-            ValidateIssuerSigningKey = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
             ValidIssuer = jwtIssuer,
             ValidAudience = jwtAudience,
+            ValidAudiences = new[] { jwtAudience },
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
     });
 
 builder.Services.AddAuthorization();
-
-// Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -67,7 +74,9 @@ builder.Services.AddSwaggerGen(c =>
 
 // Register RabbitMqOptions from configuration
 builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 
+builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
 builder.Services.AddSingleton<IRabbitMqPublisherService, RabbitMqPublisherService>();
 
 var app = builder.Build();
@@ -82,9 +91,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapControllers();
-
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

@@ -1,3 +1,4 @@
+using EvroTrust.DigitalSigning.BackgroundServices.Abstract;
 using EvroTrust.DigitalSigning.Extensions;
 using EvroTrust.DigitalSigning.Persistence.Abstract;
 using EvroTrust.DigitalSigning.Persistence.Entities;

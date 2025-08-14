@@ -1,4 +1,4 @@
-namespace EvroTrust.DigitalSigning.BackgroundServices.Handlers
+namespace EvroTrust.DigitalSigning.BackgroundServices.Abstract
 {
     public interface IMessageHandler<TMessage>
     {

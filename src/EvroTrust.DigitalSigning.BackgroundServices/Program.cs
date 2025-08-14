@@ -1,5 +1,7 @@
 using EvroTrust.DigitalSigning.BackgroundServices;
+using EvroTrust.DigitalSigning.BackgroundServices.Abstract;
 using EvroTrust.DigitalSigning.BackgroundServices.Handlers;
+using EvroTrust.DigitalSigning.BackgroundServices.Services;
 using EvroTrust.DigitalSigning.Persistence;
 using EvroTrust.DigitalSigning.Persistence.Abstract;
 using EvroTrust.Infrastructure.Messaging;
@@ -22,6 +24,7 @@ builder.Services.AddScoped<IMessageHandler<ReviewSolutionCommand>, ReviewSolutio
 builder.Services.AddScoped<IMessageHandler<FinalDecisionCommand>, FinalDecisionHandler>();
 
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 app.Run();

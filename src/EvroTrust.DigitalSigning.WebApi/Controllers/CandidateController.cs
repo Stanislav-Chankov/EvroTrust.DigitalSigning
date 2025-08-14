@@ -1,4 +1,5 @@
 using EvroTrust.DigitalSigning.WebApi.Authz;
+using EvroTrust.DigitalSigning.WebApi.Models.Requests;
 using EvroTrust.DigitalSigning.WebApi.Models.Responses;
 using EvroTrust.Infrastructure.Messaging;
 using EvroTrust.Infrastructure.Messaging.Commands;
@@ -48,7 +49,7 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
 
         [HttpPost("assign-task")]
         [Authorize(nameof(ActionType.CanAssignTask))]
-        public async Task<IActionResult> AssignTaskAsync([FromBody] AssignTaskCommand command)
+        public async Task<IActionResult> AssignTaskAsync([FromBody] AssignTaskRequest command)
         {
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
             await _publisher.PublishAsync("task.assign", new AssignTaskCommand
@@ -67,20 +68,20 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
 
         [HttpPost("upload-solution")]
         [Authorize(nameof(ActionType.CanUploadSolution))]
-        public async Task<IActionResult> UploadSolutionAsync([FromBody] UploadSolutionCommand command)
+        public async Task<IActionResult> UploadSolutionAsync([FromBody] UploadSolutionRequest request)
         {
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
             await _publisher.PublishAsync("solution.upload", new UploadSolutionCommand
             {
-                CandidateId = command.CandidateId,
-                CodingTaskId = command.CodingTaskId,
-                CodeSolutionId = command.CodeSolutionId,
-                EncryptedSolution = command.EncryptedSolution,
-                UploadedAt = command.UploadedAt,
-                FileName = command.FileName,
-                FileType = command.FileType,
-                CandidateEmail = command.CandidateEmail,
-                CandidateFullName = command.CandidateFullName
+                CandidateId = request.CandidateId,
+                CodingTaskId = request.CodingTaskId,
+                CodeSolutionId = request.CodeSolutionId,
+                EncryptedSolution = request.EncryptedSolution,
+                UploadedAt = request.UploadedAt,
+                FileName = request.FileName,
+                FileType = request.FileType,
+                CandidateEmail = request.CandidateEmail,
+                CandidateFullName = request.CandidateFullName
             });
             return Ok();
         }
@@ -120,7 +121,7 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
 
         [HttpPost("final-decision")]
         [Authorize(nameof(ActionType.CanTakeFinalDecision))]
-        public async Task<IActionResult> AddFinalDecisionAsync([FromBody] FinalDecisionCommand command)
+        public async Task<IActionResult> AddFinalDecisionAsync([FromBody] AddFinalDecisionRequest command)
         {
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
             await _publisher.PublishAsync("candidate.decision", new FinalDecisionCommand

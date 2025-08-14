@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
+using EvroTrust.DigitalSigning.WebApi.Models.Requests;
 
 namespace EvroTrust.DigitalSigning.Tests
 {
@@ -71,7 +72,7 @@ namespace EvroTrust.DigitalSigning.Tests
         [Fact]
         public async Task AssignTask_ShouldPublishMessage_AndReturnOk()
         {
-            var command = new AssignTaskCommand
+            var request = new AssignTaskRequest
             {
                 CandidateId = Guid.NewGuid(),
                 CodingTaskId = Guid.NewGuid(),
@@ -86,27 +87,27 @@ namespace EvroTrust.DigitalSigning.Tests
             _publisherMock.Setup(p => p.InitializeAsync(It.IsAny<RabbitMqOptions>())).Returns(Task.CompletedTask);
             _publisherMock.Setup(p => p.PublishAsync("task.assign", It.IsAny<AssignTaskCommand>())).Returns(ValueTask.CompletedTask);
 
-            var result = await _controller.AssignTaskAsync(command);
+            var result = await _controller.AssignTaskAsync(request);
 
             Assert.IsType<OkResult>(result);
 
             _publisherMock.Verify(p => p.InitializeAsync(_rabbitMqOptions.Value), Times.Once);
             _publisherMock.Verify(p => p.PublishAsync("task.assign", It.Is<AssignTaskCommand>(c =>
-                c.CandidateId == command.CandidateId &&
-                c.CodingTaskId == command.CodingTaskId &&
-                c.TaskTitle == command.TaskTitle &&
-                c.TaskDescription == command.TaskDescription &&
-                c.AssignedAt == command.AssignedAt &&
-                c.AssignedBy == command.AssignedBy &&
-                c.CandidateEmail == command.CandidateEmail &&
-                c.CandidateFullName == command.CandidateFullName
+                c.CandidateId == request.CandidateId &&
+                c.CodingTaskId == request.CodingTaskId &&
+                c.TaskTitle == request.TaskTitle &&
+                c.TaskDescription == request.TaskDescription &&
+                c.AssignedAt == request.AssignedAt &&
+                c.AssignedBy == request.AssignedBy &&
+                c.CandidateEmail == request.CandidateEmail &&
+                c.CandidateFullName == request.CandidateFullName
             )), Times.Once);
         }
 
         [Fact]
         public async Task UploadSolution_ShouldPublishMessage_AndReturnOk()
         {
-            var command = new UploadSolutionCommand
+            var request = new UploadSolutionRequest
             {
                 CandidateId = Guid.NewGuid(),
                 CodingTaskId = Guid.NewGuid(),
@@ -122,21 +123,21 @@ namespace EvroTrust.DigitalSigning.Tests
             _publisherMock.Setup(p => p.InitializeAsync(It.IsAny<RabbitMqOptions>())).Returns(Task.CompletedTask);
             _publisherMock.Setup(p => p.PublishAsync("solution.upload", It.IsAny<UploadSolutionCommand>())).Returns(ValueTask.CompletedTask);
 
-            var result = await _controller.UploadSolutionAsync(command);
+            var result = await _controller.UploadSolutionAsync(request);
 
             Assert.IsType<OkResult>(result);
 
             _publisherMock.Verify(p => p.InitializeAsync(_rabbitMqOptions.Value), Times.Once);
             _publisherMock.Verify(p => p.PublishAsync("solution.upload", It.Is<UploadSolutionCommand>(c =>
-                c.CandidateId == command.CandidateId &&
-                c.CodingTaskId == command.CodingTaskId &&
-                c.CodeSolutionId == command.CodeSolutionId &&
-                c.EncryptedSolution == command.EncryptedSolution &&
-                c.UploadedAt == command.UploadedAt &&
-                c.FileName == command.FileName &&
-                c.FileType == command.FileType &&
-                c.CandidateEmail == command.CandidateEmail &&
-                c.CandidateFullName == command.CandidateFullName
+                c.CandidateId == request.CandidateId &&
+                c.CodingTaskId == request.CodingTaskId &&
+                c.CodeSolutionId == request.CodeSolutionId &&
+                c.EncryptedSolution == request.EncryptedSolution &&
+                c.UploadedAt == request.UploadedAt &&
+                c.FileName == request.FileName &&
+                c.FileType == request.FileType &&
+                c.CandidateEmail == request.CandidateEmail &&
+                c.CandidateFullName == request.CandidateFullName
             )), Times.Once);
         }
 
@@ -164,7 +165,7 @@ namespace EvroTrust.DigitalSigning.Tests
         [Fact]
         public async Task FinalDecision_ShouldPublishMessage_AndReturnOk()
         {
-            var command = new FinalDecisionCommand
+            var request = new AddFinalDecisionRequest
             {
                 DecisionId = Guid.NewGuid(),
                 CandidateId = Guid.NewGuid(),
@@ -180,21 +181,21 @@ namespace EvroTrust.DigitalSigning.Tests
             _publisherMock.Setup(p => p.InitializeAsync(It.IsAny<RabbitMqOptions>())).Returns(Task.CompletedTask);
             _publisherMock.Setup(p => p.PublishAsync("candidate.decision", It.IsAny<FinalDecisionCommand>())).Returns(ValueTask.CompletedTask);
 
-            var result = await _controller.AddFinalDecisionAsync(command);
+            var result = await _controller.AddFinalDecisionAsync(request);
 
             Assert.IsType<OkResult>(result);
 
             _publisherMock.Verify(p => p.InitializeAsync(_rabbitMqOptions.Value), Times.Once);
             _publisherMock.Verify(p => p.PublishAsync("candidate.decision", It.Is<FinalDecisionCommand>(c =>
-                c.DecisionId == command.DecisionId &&
-                c.CandidateId == command.CandidateId &&
-                c.CodeSolutionId == command.CodeSolutionId &&
-                c.Reviewer == command.Reviewer &&
-                c.Status == command.Status &&
-                c.Comments == command.Comments &&
-                c.DecidedAt == command.DecidedAt &&
-                c.CandidateEmail == command.CandidateEmail &&
-                c.CandidateFullName == command.CandidateFullName
+                c.DecisionId == request.DecisionId &&
+                c.CandidateId == request.CandidateId &&
+                c.CodeSolutionId == request.CodeSolutionId &&
+                c.Reviewer == request.Reviewer &&
+                c.Status == request.Status &&
+                c.Comments == request.Comments &&
+                c.DecidedAt == request.DecidedAt &&
+                c.CandidateEmail == request.CandidateEmail &&
+                c.CandidateFullName == request.CandidateFullName
             )), Times.Once);
         }
 
@@ -222,7 +223,7 @@ namespace EvroTrust.DigitalSigning.Tests
         [Fact]
         public async Task AssignTask_ShouldHandlePublisherException()
         {
-            var command = new AssignTaskCommand
+            var request = new AssignTaskRequest
             {
                 CandidateId = Guid.NewGuid(),
                 CodingTaskId = Guid.NewGuid(),
@@ -236,13 +237,13 @@ namespace EvroTrust.DigitalSigning.Tests
 
             _publisherMock.Setup(p => p.InitializeAsync(It.IsAny<RabbitMqOptions>())).ThrowsAsync(new ArgumentNullException("RabbitMqOptions cannot be null."));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _controller.AssignTaskAsync(command));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _controller.AssignTaskAsync(request));
         }
 
         [Fact]
         public async Task UploadSolution_ShouldHandlePublisherException()
         {
-            var command = new UploadSolutionCommand
+            var request = new UploadSolutionRequest
             {
                 CandidateId = Guid.NewGuid(),
                 CodingTaskId = Guid.NewGuid(),
@@ -257,7 +258,7 @@ namespace EvroTrust.DigitalSigning.Tests
 
             _publisherMock.Setup(p => p.InitializeAsync(It.IsAny<RabbitMqOptions>())).ThrowsAsync(new ArgumentNullException("RabbitMqOptions cannot be null."));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _controller.UploadSolutionAsync(command));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _controller.UploadSolutionAsync(request));
         }
 
         [Fact]
@@ -273,7 +274,7 @@ namespace EvroTrust.DigitalSigning.Tests
         [Fact]
         public async Task FinalDecision_ShouldHandlePublisherException()
         {
-            var command = new FinalDecisionCommand
+            var request = new AddFinalDecisionRequest
             {
                 DecisionId = Guid.NewGuid(),
                 CandidateId = Guid.NewGuid(),
@@ -288,7 +289,7 @@ namespace EvroTrust.DigitalSigning.Tests
 
             _publisherMock.Setup(p => p.InitializeAsync(It.IsAny<RabbitMqOptions>())).ThrowsAsync(new ArgumentNullException("RabbitMqOptions cannot be null."));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _controller.AddFinalDecisionAsync(command));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _controller.AddFinalDecisionAsync(request));
         }
     }
 }

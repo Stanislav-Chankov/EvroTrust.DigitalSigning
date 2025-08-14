@@ -1,3 +1,4 @@
+using EvroTrust.DigitalSigning.BackgroundServices.Abstract;
 using System.Security.Cryptography;
 
 namespace EvroTrust.DigitalSigning.BackgroundServices.Handlers

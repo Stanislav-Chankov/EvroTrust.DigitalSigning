@@ -1,4 +1,4 @@
-using EvroTrust.DigitalSigning.BackgroundServices.Handlers;
+using EvroTrust.DigitalSigning.BackgroundServices.Abstract;
 using EvroTrust.Infrastructure.Messaging;
 using EvroTrust.Infrastructure.Messaging.Commands;
 using Microsoft.Extensions.Options;

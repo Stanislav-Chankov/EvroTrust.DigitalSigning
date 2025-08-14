@@ -13,5 +13,6 @@ namespace EvroTrust.DigitalSigning.Persistence.Entities
         public string AssignedBy { get; set; } = string.Empty;
 
         public ICollection<CodeSolution> CodeSolutions { get; set; } = new List<CodeSolution>();
+        public string ContestUrl { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 using EvroTrust.DigitalSigning.WebApi.Authz;
+using EvroTrust.DigitalSigning.WebApi.Models.Responses;
 using EvroTrust.Infrastructure.Messaging;
 using EvroTrust.Infrastructure.Messaging.Commands;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +24,7 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
 
         [HttpPost("register")]
         [Authorize(nameof(ActionType.CanRegisterCandidate))]
-        public async Task<IActionResult> RegisterCandidate([FromBody] RegisterCandidateCommand command)
+        public async Task<IActionResult> RegisterCandidateAsync([FromBody] RegisterCandidateCommand command)
         {
             var candidateId = Guid.NewGuid();
 
@@ -42,12 +43,12 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
                 ResumeUrl = command.ResumeUrl
             });
 
-            return Ok(new { CandidateId = candidateId });
+            return Ok(new RegisterCandidateResponse { CandidateId = candidateId });
         }
 
         [HttpPost("assign-task")]
         [Authorize(nameof(ActionType.CanAssignTask))]
-        public async Task<IActionResult> AssignTask([FromBody] AssignTaskCommand command)
+        public async Task<IActionResult> AssignTaskAsync([FromBody] AssignTaskCommand command)
         {
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
             await _publisher.PublishAsync("task.assign", new AssignTaskCommand
@@ -66,7 +67,7 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
 
         [HttpPost("upload-solution")]
         [Authorize(nameof(ActionType.CanUploadSolution))]
-        public async Task<IActionResult> UploadSolution([FromBody] UploadSolutionCommand command)
+        public async Task<IActionResult> UploadSolutionAsync([FromBody] UploadSolutionCommand command)
         {
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
             await _publisher.PublishAsync("solution.upload", new UploadSolutionCommand
@@ -86,7 +87,7 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
 
         [HttpGet("review-solution/{candidateId}")]
         [Authorize(nameof(ActionType.CanReviewSolution))]
-        public async Task<IActionResult> ReviewSolution(Guid candidateId)
+        public async Task<IActionResult> ReviewSolutionAsync(Guid candidateId)
         {
             // TODO: Refactor with Callback/Webhook (Push) Pattern
             // 1.User submits a review request via your API.
@@ -114,12 +115,12 @@ namespace EvroTrust.DigitalSigning.WebApi.Controllers
             await _publisher.PublishAsync("solution.review", reviewCommand);
 
             // Return dummy solution for demonstration
-            return Ok(new { CandidateId = candidateId, SolutionCode = "// candidate's code here" });
+            return Ok(new ReviewSolutionResponse { CandidateId = candidateId, SolutionCode = "// candidate's code here" });
         }
 
         [HttpPost("final-decision")]
         [Authorize(nameof(ActionType.CanTakeFinalDecision))]
-        public async Task<IActionResult> FinalDecision([FromBody] FinalDecisionCommand command)
+        public async Task<IActionResult> AddFinalDecisionAsync([FromBody] FinalDecisionCommand command)
         {
             await _publisher.InitializeAsync(_rabbitMqOptions.Value);
             await _publisher.PublishAsync("candidate.decision", new FinalDecisionCommand

@@ -17,12 +17,8 @@ namespace EvroTrust.Infrastructure.Messaging
         private IConnection? _connection;
         private IChannel? _channel;
         private string _exchangeName = string.Empty;
-        private string _queueName = string.Empty;
         private bool _disposed;
         private readonly ILogger<IRabbitMqPublisherService> _logger;
-        //private Dictionary<string, string> _featureExchangeMap = new();
-        //private Dictionary<string, string> _featureRoutingKeyMap = new();
-        //private bool isInitialized = false;
 
         public RabbitMqPublisherService(ILogger<IRabbitMqPublisherService> logger)
         {
@@ -31,8 +27,12 @@ namespace EvroTrust.Infrastructure.Messaging
 
         public async Task InitializeAsync(RabbitMqOptions options)
         {
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options), "RabbitMqOptions cannot be null.");
+            }
+
             _exchangeName = options.ExchangeName;
-            _queueName = "inventory_queue"; //options.QueueName;
 
             var factory = new ConnectionFactory
             {
@@ -65,7 +65,6 @@ namespace EvroTrust.Infrastructure.Messaging
             await _channel.QueueBindAsync("solution_review_queue", "candidate_exchange", "solution.review");
             await _channel.QueueBindAsync("candidate_decision_queue", "candidate_exchange", "candidate.decision");
 
-            // WORKING EXAMPLE
             // 2. Declare exchange (creates if not exists, does nothing if exists)
             await _channel.ExchangeDeclareAsync(
                 exchange: _exchangeName,

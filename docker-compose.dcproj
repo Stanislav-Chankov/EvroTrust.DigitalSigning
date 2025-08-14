@@ -13,8 +13,6 @@
     <None Include=".dockerignore" />
     <None Include="DockerfileInventory" />
     <None Include="DockerfileOrdering" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\" />
+    <None Include="src\EvroTrust.DigitalSigning.WebApi.Tests\Controllers\CandidateControllerTests.cs" />
   </ItemGroup>
 </Project>

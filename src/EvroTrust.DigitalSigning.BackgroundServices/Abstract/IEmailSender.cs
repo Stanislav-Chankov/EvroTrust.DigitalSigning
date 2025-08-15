@@ -3,7 +3,7 @@
     public interface IEmailSender
     {
         /// <summary>
-        /// Sends an email asynchronously.
+        /// Sends an email asynchronously, retrying on transient failures with advanced backoff.
         /// </summary>
         /// <param name="toEmail">The recipient's email address.</param>
         /// <param name="subject">The subject of the email.</param>

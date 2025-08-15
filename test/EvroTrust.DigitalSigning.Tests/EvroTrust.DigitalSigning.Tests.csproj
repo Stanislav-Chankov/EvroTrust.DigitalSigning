@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\EvroTrust.DigitalSigning.BackgroundServices\EvroTrust.DigitalSigning.BackgroundServices.csproj" />
     <ProjectReference Include="..\..\src\EvroTrust.DigitalSigning.WebApi\EvroTrust.DigitalSigning.WebApi.csproj" />
   </ItemGroup>
 
